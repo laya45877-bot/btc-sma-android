@@ -5,8 +5,6 @@ from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.clock import Clock
 import ccxt
-import pandas as pd
-import numpy as np
 import threading
 
 class TradingBotUI(BoxLayout):
@@ -27,7 +25,7 @@ class TradingBotUI(BoxLayout):
         )
         self.add_widget(title_label)
 
-        # Developer Credit / Owner Name
+        # Developer / Owner Name
         dev_label = Label(
             text="Developed by: [b]Kyaw Thet Aung(Zeyo)[/b]",
             markup=True,
@@ -48,7 +46,7 @@ class TradingBotUI(BoxLayout):
         )
         self.add_widget(self.price_label)
 
-        # SMA Values
+        # SMA Display
         self.sma_label = Label(
             text="SMA (20): -- | SMA (50): --",
             font_size='15sp',
@@ -108,16 +106,20 @@ class TradingBotUI(BoxLayout):
         try:
             exchange = ccxt.binance()
             ohlcv = exchange.fetch_ohlcv('BTC/USDT', timeframe='1h', limit=60)
-            df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
             
-            df['sma20'] = df['close'].rolling(window=20).mean()
-            df['sma50'] = df['close'].rolling(window=50).mean()
+            # Close prices
+            close_prices = [candle[4] for candle in ohlcv]
 
-            latest_close = df['close'].iloc[-1]
-            latest_sma20 = df['sma20'].iloc[-1]
-            latest_sma50 = df['sma50'].iloc[-1]
+            if len(close_prices) < 50:
+                raise Exception("Not enough price candles fetched")
 
-            if latest_sma20 > latest_sma50:
+            latest_close = close_prices[-1]
+            
+            # Fast Pure Python SMA Calculation
+            sma20 = sum(close_prices[-20:]) / 20.0
+            sma50 = sum(close_prices[-50:]) / 50.0
+
+            if sma20 > sma50:
                 signal = "BUY SIGNAL (Bullish / Golden Cross)"
                 sig_color = (0, 1, 0, 1)
             else:
@@ -126,7 +128,7 @@ class TradingBotUI(BoxLayout):
 
             def update_ui(dt):
                 self.price_label.text = f"BTC/USDT Price: ${latest_close:,.2f}"
-                self.sma_label.text = f"SMA (20): ${latest_sma20:,.2f} | SMA (50): ${latest_sma50:,.2f}"
+                self.sma_label.text = f"SMA (20): ${sma20:,.2f} | SMA (50): ${sma50:,.2f}"
                 self.signal_label.text = f"Signal: {signal}"
                 self.signal_label.color = sig_color
                 self.append_log(f"Data updated successfully! Close: ${latest_close:,.2f}")
