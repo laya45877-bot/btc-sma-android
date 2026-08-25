@@ -31,9 +31,9 @@ jobs:
       - name: Install Buildozer & Cython
         run: |
           python -m pip install --upgrade pip
-          pip install buildozer "Cython<3.0"
+          pip install "cython<3.0.0" buildozer
 
-      - name: Setup buildozer.spec & SDK
+      - name: Build spec and APK
         run: |
           cat << 'EOF' > buildozer.spec
           [app]
@@ -43,7 +43,7 @@ jobs:
           source.dir = .
           source.include_exts = py,png,jpg,kv,atlas
           version = 1.0
-          requirements = python3,kivy,ccxt,requests,urllib3,certifi,charset-normalizer,idna
+          requirements = python3,kivy,openssl,certifi
           orientation = portrait
           fullscreen = 0
 
@@ -67,8 +67,6 @@ jobs:
           ln -s ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest ~/.buildozer/android/platform/android-sdk/tools || true
           yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk --licenses || true
 
-      - name: Build APK
-        run: |
           buildozer android debug
 
       - name: Upload APK
