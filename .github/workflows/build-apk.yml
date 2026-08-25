@@ -16,7 +16,9 @@ jobs:
 
       - name: Free Disk Space & Add Swap (Fix Memory Limit)
         run: |
-          sudo fallocate -l 4G /swapfile
+          sudo swapoff -a || true
+          sudo rm -f /swapfile
+          sudo dd if=/dev/zero of=/swapfile bs=1M count=4096 status=none
           sudo chmod 600 /swapfile
           sudo mkswap /swapfile
           sudo swapon /swapfile
