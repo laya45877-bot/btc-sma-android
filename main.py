@@ -26,7 +26,7 @@ class TradingBotUI(BoxLayout):
         )
         self.add_widget(title_label)
 
-        # Developer Credit
+        # Developer Credit / Owner Name
         dev_label = Label(
             text="Developed by: [b]Kyaw Thet Aung(Zeyo)[/b]",
             markup=True,
@@ -47,7 +47,7 @@ class TradingBotUI(BoxLayout):
         )
         self.add_widget(self.price_label)
 
-        # SMA Values
+        # SMA Values Display
         self.sma_label = Label(
             text="SMA (20): -- | SMA (50): --",
             font_size='15sp',
@@ -57,7 +57,7 @@ class TradingBotUI(BoxLayout):
         )
         self.add_widget(self.sma_label)
 
-        # Trading Signal
+        # Trading Signal Display
         self.signal_label = Label(
             text="Signal: WAITING FOR DATA",
             font_size='18sp',
@@ -67,7 +67,7 @@ class TradingBotUI(BoxLayout):
         )
         self.add_widget(self.signal_label)
 
-        # Log Area
+        # Log Window
         self.log_label = Label(
             text="System initialized...\nWaiting to fetch data...\n",
             font_size='13sp',
@@ -93,7 +93,7 @@ class TradingBotUI(BoxLayout):
         self.fetch_btn.bind(on_press=self.trigger_fetch)
         self.add_widget(self.fetch_btn)
 
-        # Auto fetch on start
+        # Auto fetch data after 1 sec
         Clock.schedule_once(lambda dt: self.trigger_fetch(None), 1)
 
     def append_log(self, msg):
@@ -105,14 +105,13 @@ class TradingBotUI(BoxLayout):
 
     def fetch_data(self):
         try:
-            # Direct Binance API Call (No CCXT needed)
+            # Binance Public API Call
             url = "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=60"
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             
             with urllib.request.urlopen(req, timeout=10) as response:
                 data = json.loads(response.read().decode('utf-8'))
             
-            # Close prices are at index 4
             close_prices = [float(candle[4]) for candle in data]
 
             if len(close_prices) < 50:
