@@ -29,12 +29,32 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            git \
-            zip \
-            unzip \
-            autoconf \
-            libtool \
-            pkg-config \
+            git zip unzip autoconf libtool pkg-config zlib1g-dev \
+            libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev \
+            libssl-dev automake autopoint gettext virtualenv
+
+      - name: Install Buildozer
+        run: |
+          python -m pip install --upgrade pip
+          pip install buildozer cython
+
+      - name: Enable Auto Accept SDK Licenses
+        run: |
+          if [ -f buildozer.spec ]; then
+            sed -i 's/^#\?\s*android.accept_sdk_license\s*=.*/android.accept_sdk_license = True/' buildozer.spec
+          fi
+          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
+          echo -e "89330d22263015b00e623bc9f22c5097a77257e5\nd56f5187479451eabf01fb78af6b77350674def1\n24333f8a63718e15525996fac88638374af1006a\n33b622fc7223536689d22122383ad16e5a3c21f9\n84831b9409646a2a0a2569e5f49efe630d70f9de\ned250226475253d5c5082161a00a1f0a149f1cb6\n7a938fe55d579d5013327632405c0c6be0132db0" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
+
+      - name: Build APK
+        run: |
+          yes | buildozer android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-sma-debug-apk
+          path: bin/*.apk            pkg-config \
             zlib1g-dev \
             libncurses5-dev \
             libncursesw5-dev \
