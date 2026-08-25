@@ -14,6 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Free Disk Space & Add Swap (Fix Memory Limit)
+        run: |
+          sudo fallocate -l 4G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -39,7 +46,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Setup Android SDK Tools & Licenses
+      - name: Setup Android SDK & Force Single Architecture
         run: |
           # 1. SDK Folder လမ်းကြောင်းများ ဖန်တီးခြင်း
           mkdir -p ~/.buildozer/android/platform/android-sdk/cmdline-tools
@@ -50,15 +57,16 @@ jobs:
           mv cmdline-tools ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest
           rm cmdline.zip
 
-          # 3. sdkmanager လိုအပ်သော tools Symlink ဖန်တီးခြင်း
+          # 3. Symlink ချိတ်ဆက်ခြင်း
           ln -s ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest ~/.buildozer/android/platform/android-sdk/tools
 
-          # 4. License များကို အလိုအလျောက် လက်ခံခြင်း
+          # 4. License လက်ခံခြင်း
           yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk --licenses || true
 
-          # 5. buildozer.spec ထဲတွင် Auto Accept ပြင်ခြင်း
+          # 5. buildozer.spec ထဲတွင် Single Arch (arm64-v8a) သို့ အတင်းပြောင်းခြင်း
           if [ -f buildozer.spec ]; then
             sed -i 's/^#\?\s*android.accept_sdk_license\s*=.*/android.accept_sdk_license = True/' buildozer.spec
+            sed -i 's/^#\?\s*android.archs\s*=.*/android.archs = arm64-v8a/' buildozer.spec
           fi
 
       - name: Build APK
