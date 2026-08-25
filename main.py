@@ -1,202 +1,147 @@
-
-import threading
-import time
-from datetime import datetime
-
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
+from kivy.clock import Clock
 import ccxt
 import pandas as pd
-from kivy.app import App
-from kivy.clock import Clock
-from kivy.lang import Builder
-from kivy.properties import StringProperty, BooleanProperty
-from kivy.uix.boxlayout import BoxLayout
+import numpy as np
+import threading
 
-KV = r"""
-<RootWidget>:
-    orientation: "vertical"
-    padding: dp(12)
-    spacing: dp(8)
-
-    Label:
-        text: "BTC SMA 9/21 Trading Bot"
-        font_size: "22sp"
-        bold: True
-        size_hint_y: None
-        height: dp(42)
-
-    GridLayout:
-        cols: 2
-        size_hint_y: None
-        height: dp(170)
-        spacing: dp(6)
-
-        Label:
-            text: "Symbol"
-        Label:
-            text: root.symbol
-
-        Label:
-            text: "Price"
-        Label:
-            text: root.price
-
-        Label:
-            text: "SMA 9"
-        Label:
-            text: root.sma9
-
-        Label:
-            text: "SMA 21"
-        Label:
-            text: root.sma21
-
-        Label:
-            text: "Signal"
-        Label:
-            text: root.signal
-
-        Label:
-            text: "Mode"
-        Label:
-            text: "PAPER TRADING"
-
-    BoxLayout:
-        size_hint_y: None
-        height: dp(50)
-        spacing: dp(8)
-
-        Button:
-            text: "START BOT"
-            on_release: root.start_bot()
-
-        Button:
-            text: "STOP BOT"
-            on_release: root.stop_bot()
-
-    Label:
-        text: root.status
-        text_size: self.width, None
-        halign: "left"
-        valign: "top"
-
-    Label:
-        text: root.log_text
-        text_size: self.width, self.height
-        halign: "left"
-        valign: "top"
-"""
-
-Builder.load_string(KV)
-
-
-class RootWidget(BoxLayout):
-    symbol = StringProperty("BTC/USDT")
-    price = StringProperty("-")
-    sma9 = StringProperty("-")
-    sma21 = StringProperty("-")
-    signal = StringProperty("WAIT")
-    status = StringProperty("Stopped")
-    log_text = StringProperty("Paper trading is ON. No real orders will be sent.")
-
-    running = BooleanProperty(False)
-    thread = None
-    exchange = None
-    in_position = False
-
+class TradingBotUI(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.exchange = ccxt.binance({
-            "enableRateLimit": True,
-            "options": {"defaultType": "spot"},
-        })
+        self.orientation = 'vertical'
+        self.padding = 15
+        self.spacing = 10
 
-    def add_log(self, msg):
-        def update(_):
-            now = datetime.now().strftime("%H:%M:%S")
-            self.log_text = f"[{now}] {msg}\n" + self.log_text[:1800]
-        Clock.schedule_once(update)
+        # Title Label
+        title_label = Label(
+            text="[b]BTC SMA TRADING BOT[/b]",
+            markup=True,
+            font_size='22sp',
+            size_hint_y=None,
+            height=40,
+            color=(0.2, 0.8, 1, 1)
+        )
+        self.add_widget(title_label)
 
-    def start_bot(self):
-        if self.running:
-            return
-        self.running = True
-        self.status = "Running..."
-        self.add_log("Bot started.")
-        self.thread = threading.Thread(target=self.bot_loop, daemon=True)
-        self.thread.start()
+        # Developer Credit / Owner Name
+        dev_label = Label(
+            text="Developed by: [b]Kyaw Thet Aung(Zeyo)[/b]",
+            markup=True,
+            font_size='15sp',
+            size_hint_y=None,
+            height=30,
+            color=(0.9, 0.7, 0.2, 1)
+        )
+        self.add_widget(dev_label)
 
-    def stop_bot(self):
-        self.running = False
-        self.status = "Stopped"
-        self.add_log("Bot stopped.")
+        # Price Display
+        self.price_label = Label(
+            text="BTC/USDT Price: Loading...",
+            font_size='18sp',
+            size_hint_y=None,
+            height=35,
+            color=(1, 1, 1, 1)
+        )
+        self.add_widget(self.price_label)
+
+        # SMA Values
+        self.sma_label = Label(
+            text="SMA (20): -- | SMA (50): --",
+            font_size='15sp',
+            size_hint_y=None,
+            height=30,
+            color=(0.8, 0.8, 0.8, 1)
+        )
+        self.add_widget(self.sma_label)
+
+        # Trading Signal
+        self.signal_label = Label(
+            text="Signal: WAITING FOR DATA",
+            font_size='18sp',
+            size_hint_y=None,
+            height=40,
+            color=(1, 1, 0, 1)
+        )
+        self.add_widget(self.signal_label)
+
+        # Log Area
+        self.log_label = Label(
+            text="System initialized...\nWaiting to fetch data...\n",
+            font_size='13sp',
+            size_hint_y=None,
+            color=(0.7, 1, 0.7, 1),
+            halign='left',
+            valign='top'
+        )
+        self.log_label.bind(texture_size=self.log_label.setter('size'))
+
+        scroll = ScrollView(size_hint=(1, 1))
+        scroll.add_widget(self.log_label)
+        self.add_widget(scroll)
+
+        # Refresh Button
+        self.fetch_btn = Button(
+            text="Refresh Market Data",
+            font_size='16sp',
+            size_hint_y=None,
+            height=50,
+            background_color=(0.2, 0.6, 1, 1)
+        )
+        self.fetch_btn.bind(on_press=self.trigger_fetch)
+        self.add_widget(self.fetch_btn)
+
+        # Auto fetch on start
+        Clock.schedule_once(lambda dt: self.trigger_fetch(None), 1)
+
+    def append_log(self, msg):
+        self.log_label.text += f"\n{msg}"
+
+    def trigger_fetch(self, instance):
+        self.append_log("Fetching market data from Binance...")
+        threading.Thread(target=self.fetch_data, daemon=True).start()
 
     def fetch_data(self):
-        bars = self.exchange.fetch_ohlcv(
-            self.symbol, "15m", limit=100
-        )
-        df = pd.DataFrame(
-            bars,
-            columns=["timestamp", "open", "high", "low", "close", "volume"]
-        )
-        df["sma9"] = df["close"].rolling(9).mean()
-        df["sma21"] = df["close"].rolling(21).mean()
-        return df
+        try:
+            exchange = ccxt.binance()
+            ohlcv = exchange.fetch_ohlcv('BTC/USDT', timeframe='1h', limit=60)
+            df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
+            
+            df['sma20'] = df['close'].rolling(window=20).mean()
+            df['sma50'] = df['close'].rolling(window=50).mean()
 
-    def bot_loop(self):
-        while self.running:
-            try:
-                df = self.fetch_data()
+            latest_close = df['close'].iloc[-1]
+            latest_sma20 = df['sma20'].iloc[-1]
+            latest_sma50 = df['sma50'].iloc[-1]
 
-                # Use completed candles only.
-                prev = df.iloc[-3]
-                last = df.iloc[-2]
-                current = float(df.iloc[-1]["close"])
+            if latest_sma20 > latest_sma50:
+                signal = "BUY SIGNAL (Bullish / Golden Cross)"
+                sig_color = (0, 1, 0, 1)
+            else:
+                signal = "SELL / BEARISH SIGNAL"
+                sig_color = (1, 0.3, 0.3, 1)
 
-                p9 = float(last["sma9"])
-                p21 = float(last["sma21"])
+            def update_ui(dt):
+                self.price_label.text = f"BTC/USDT Price: ${latest_close:,.2f}"
+                self.sma_label.text = f"SMA (20): ${latest_sma20:,.2f} | SMA (50): ${latest_sma50:,.2f}"
+                self.signal_label.text = f"Signal: {signal}"
+                self.signal_label.color = sig_color
+                self.append_log(f"Data updated successfully! Close: ${latest_close:,.2f}")
 
-                buy = (
-                    float(last["sma9"]) > float(last["sma21"])
-                    and float(prev["sma9"]) <= float(prev["sma21"])
-                )
-                sell = (
-                    float(last["sma9"]) < float(last["sma21"])
-                    and float(prev["sma9"]) >= float(prev["sma21"])
-                )
+            Clock.schedule_once(update_ui, 0)
 
-                def update_ui(_):
-                    self.price = f"${current:,.2f}"
-                    self.sma9 = f"{p9:,.2f}"
-                    self.sma21 = f"{p21:,.2f}"
-                    self.signal = "BUY" if buy else ("SELL" if sell else "WAIT")
-                    self.status = "Running — Paper Trading"
-                Clock.schedule_once(update_ui)
+        except Exception as e:
+            def update_err(dt):
+                self.append_log(f"Error fetching data: {str(e)}")
+            Clock.schedule_once(update_err, 0)
 
-                if buy and not self.in_position:
-                    self.in_position = True
-                    self.add_log(f"BUY SIGNAL @ ${current:,.2f} (paper only)")
-                elif sell and self.in_position:
-                    self.in_position = False
-                    self.add_log(f"SELL SIGNAL @ ${current:,.2f} (paper only)")
-                else:
-                    self.add_log(
-                        f"Price ${current:,.2f} | SMA9 {p9:,.2f} | SMA21 {p21:,.2f}"
-                    )
-
-            except Exception as e:
-                self.add_log(f"Error: {type(e).__name__}: {e}")
-
-            # Check once per minute, but stop promptly if requested.
-            for _ in range(60):
-                if not self.running:
-                    break
-                time.sleep(1)
-
-
-class TradingApp(App):
+class BTCSMABotApp(App):
     def build(self):
-        return RootWidget()
+        self.title = "BTC SMA Bot by Kyaw Thet Aung(Zeyo)"
+        return TradingBotUI()
 
-
-if __name__ == "__main__":
-    TradingApp().run()
+if __name__ == '__main__':
+    BTCSMABotApp().run()
