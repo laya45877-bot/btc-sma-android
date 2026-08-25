@@ -1,153 +1,58 @@
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.uix.button import Button
-from kivy.uix.scrollview import ScrollView
-from kivy.clock import Clock
-import json
-import urllib.request
-import threading
+[app]
 
-class TradingBotUI(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.orientation = 'vertical'
-        self.padding = 15
-        self.spacing = 10
+# (str) Title of your application
+title = BTC SMA Bot by Kyaw Thet Aung(Zeyo)
 
-        # Title Label
-        title_label = Label(
-            text="[b]BTC SMA TRADING BOT[/b]",
-            markup=True,
-            font_size='22sp',
-            size_hint_y=None,
-            height=40,
-            color=(0.2, 0.8, 1, 1)
-        )
-        self.add_widget(title_label)
+# (str) Package name
+package.name = btcsma
 
-        # Developer Credit / Owner Name
-        dev_label = Label(
-            text="Developed by: [b]Kyaw Thet Aung(Zeyo)[/b]",
-            markup=True,
-            font_size='15sp',
-            size_hint_y=None,
-            height=30,
-            color=(0.9, 0.7, 0.2, 1)
-        )
-        self.add_widget(dev_label)
+# (str) Package domain (needed for android packaging)
+package.domain = org.example
 
-        # Price Display
-        self.price_label = Label(
-            text="BTC/USDT Price: Loading...",
-            font_size='18sp',
-            size_hint_y=None,
-            height=35,
-            color=(1, 1, 1, 1)
-        )
-        self.add_widget(self.price_label)
+# (list) Source files to include (let it empty to include all files)
+source.dir = .
 
-        # SMA Values Display
-        self.sma_label = Label(
-            text="SMA (20): -- | SMA (50): --",
-            font_size='15sp',
-            size_hint_y=None,
-            height=30,
-            color=(0.8, 0.8, 0.8, 1)
-        )
-        self.add_widget(self.sma_label)
+# (list) List of extensions to pack
+source.include_exts = py,png,jpg,kv,atlas
 
-        # Trading Signal Display
-        self.signal_label = Label(
-            text="Signal: WAITING FOR DATA",
-            font_size='18sp',
-            size_hint_y=None,
-            height=40,
-            color=(1, 1, 0, 1)
-        )
-        self.add_widget(self.signal_label)
+# (str) Application versioning
+version = 1.0
 
-        # Log Window
-        self.log_label = Label(
-            text="System initialized...\nWaiting to fetch data...\n",
-            font_size='13sp',
-            size_hint_y=None,
-            color=(0.7, 1, 0.7, 1),
-            halign='left',
-            valign='top'
-        )
-        self.log_label.bind(texture_size=self.log_label.setter('size'))
+# (list) Application requirements
+requirements = python3,kivy
 
-        scroll = ScrollView(size_hint=(1, 1))
-        scroll.add_widget(self.log_label)
-        self.add_widget(scroll)
+# (list) Supported orientations
+orientation = portrait
 
-        # Refresh Button
-        self.fetch_btn = Button(
-            text="Refresh Market Data",
-            font_size='16sp',
-            size_hint_y=None,
-            height=50,
-            background_color=(0.2, 0.6, 1, 1)
-        )
-        self.fetch_btn.bind(on_press=self.trigger_fetch)
-        self.add_widget(self.fetch_btn)
+#
+# Android specific
+#
 
-        # Auto fetch data after 1 sec
-        Clock.schedule_once(lambda dt: self.trigger_fetch(None), 1)
+# (list) Permissions
+android.permissions = INTERNET
 
-    def append_log(self, msg):
-        self.log_label.text += f"\n{msg}"
+# (int) Target Android API, should be as high as possible.
+android.api = 33
 
-    def trigger_fetch(self, instance):
-        self.append_log("Fetching market data from Binance...")
-        threading.Thread(target=self.fetch_data, daemon=True).start()
+# (int) Minimum API your APK will support.
+android.minapi = 24
 
-    def fetch_data(self):
-        try:
-            # Binance Public API Call
-            url = "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=60"
-            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-            
-            with urllib.request.urlopen(req, timeout=10) as response:
-                data = json.loads(response.read().decode('utf-8'))
-            
-            close_prices = [float(candle[4]) for candle in data]
+# (list) Android architectural support (arm64-v8a, armeabi-v7a, x86, x86_64)
+android.archs = arm64-v8a
 
-            if len(close_prices) < 50:
-                raise Exception("Not enough price candles fetched")
+# (bool) If True, automatically accept SDK license
+android.accept_sdk_license = True
 
-            latest_close = close_prices[-1]
-            
-            # Pure Python SMA Calculation
-            sma20 = sum(close_prices[-20:]) / 20.0
-            sma50 = sum(close_prices[-50:]) / 50.0
+[buildozer]
 
-            if sma20 > sma50:
-                signal = "BUY SIGNAL (Bullish / Golden Cross)"
-                sig_color = (0, 1, 0, 1)
-            else:
-                signal = "SELL / BEARISH SIGNAL"
-                sig_color = (1, 0.3, 0.3, 1)
+# (int) Log level (0 = error, 1 = info, 2 = debug (with command output))
+log_level = 2
 
-            def update_ui(dt):
-                self.price_label.text = f"BTC/USDT Price: ${latest_close:,.2f}"
-                self.sma_label.text = f"SMA (20): ${sma20:,.2f} | SMA (50): ${sma50:,.2f}"
-                self.signal_label.text = f"Signal: {signal}"
-                self.signal_label.color = sig_color
-                self.append_log(f"Data updated successfully! Close: ${latest_close:,.2f}")
+# (int) Display warning if buildozer is run as root (0 = False, 1 = True)
+warn_on_root = 1
 
-            Clock.schedule_once(update_ui, 0)
+# (str) Path to build artifact, storage, etc.
+build_dir = .buildozer
 
-        except Exception as e:
-            def update_err(dt):
-                self.append_log(f"Error fetching data: {str(e)}")
-            Clock.schedule_once(update_err, 0)
-
-class BTCSMABotApp(App):
-    def build(self):
-        self.title = "BTC SMA Bot by Kyaw Thet Aung(Zeyo)"
-        return TradingBotUI()
-
-if __name__ == '__main__':
-    BTCSMABotApp().run()
+# (str) Path to output bin (APK, AAB)
+bin_dir = ./bin
