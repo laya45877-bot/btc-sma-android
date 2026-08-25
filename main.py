@@ -4,7 +4,8 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.clock import Clock
-import ccxt
+import json
+import urllib.request
 import threading
 
 class TradingBotUI(BoxLayout):
@@ -25,7 +26,7 @@ class TradingBotUI(BoxLayout):
         )
         self.add_widget(title_label)
 
-        # Developer / Owner Name
+        # Developer Credit
         dev_label = Label(
             text="Developed by: [b]Kyaw Thet Aung(Zeyo)[/b]",
             markup=True,
@@ -46,7 +47,7 @@ class TradingBotUI(BoxLayout):
         )
         self.add_widget(self.price_label)
 
-        # SMA Display
+        # SMA Values
         self.sma_label = Label(
             text="SMA (20): -- | SMA (50): --",
             font_size='15sp',
@@ -104,18 +105,22 @@ class TradingBotUI(BoxLayout):
 
     def fetch_data(self):
         try:
-            exchange = ccxt.binance()
-            ohlcv = exchange.fetch_ohlcv('BTC/USDT', timeframe='1h', limit=60)
+            # Direct Binance API Call (No CCXT needed)
+            url = "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=60"
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             
-            # Close prices
-            close_prices = [candle[4] for candle in ohlcv]
+            with urllib.request.urlopen(req, timeout=10) as response:
+                data = json.loads(response.read().decode('utf-8'))
+            
+            # Close prices are at index 4
+            close_prices = [float(candle[4]) for candle in data]
 
             if len(close_prices) < 50:
                 raise Exception("Not enough price candles fetched")
 
             latest_close = close_prices[-1]
             
-            # Fast Pure Python SMA Calculation
+            # Pure Python SMA Calculation
             sma20 = sum(close_prices[-20:]) / 20.0
             sma50 = sum(close_prices[-50:]) / 50.0
 
