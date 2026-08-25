@@ -1,12 +1,11 @@
-
 [app]
-title = BTC SMA Trading Bot
+title = BTC SMA Bot by Kyaw Thet Aung(Zeyo)
 package.name = btcsma
 package.domain = org.example
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
-requirements = python3,kivy,ccxt,pandas,numpy
+requirements = python3,kivy
 orientation = portrait
 fullscreen = 0
 
