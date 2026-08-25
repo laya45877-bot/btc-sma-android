@@ -48,9 +48,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Setup Android SDK & Clear Cache
+      - name: Clean Old Workspace Cache & Force arm64-v8a
         run: |
-          # 1. SDK Folder Setup
+          rm -rf .buildozer
+          rm -rf ~/.buildozer
+
           mkdir -p ~/.buildozer/android/platform/android-sdk/cmdline-tools
           curl -sS https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -o cmdline.zip
           unzip -q cmdline.zip
@@ -58,11 +60,10 @@ jobs:
           rm cmdline.zip
           ln -s ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest ~/.buildozer/android/platform/android-sdk/tools
 
-          # 2. Accept Licenses
           yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk --licenses || true
 
-          # 3. Multi-arch build cache ဟောင်းများ ဖျက်ထုတ်ခြင်း
-          rm -rf ~/.buildozer/android/platform/build-*
+          sed -i 's/android.archs =.*/android.archs = arm64-v8a/g' buildozer.spec
+          sed -i 's/android.api =.*/android.api = 33/g' buildozer.spec
 
       - name: Build APK
         run: |
