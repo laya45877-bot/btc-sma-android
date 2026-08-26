@@ -20,8 +20,7 @@ version = 1.0
 
 # (list) Application requirements 
 # ဒီနေရာမှာ လိုအပ်မယ့် libraries တွေ အားလုံးကို ကော်မာ (,) ခံပြီး ထည့်ပေးရပါမယ်
-requirements = python3,kivy,requests,certifi,urllib3,idna,charset-normalizer
-
+requirements = python3,kivy
 # (list) Supported orientations
 orientation = portrait
 
