@@ -43,7 +43,10 @@ android.archs = arm64-v8a
 # (bool) If True, automatically accept SDK license
 android.accept_sdk_license = True
 
-# python-for-android branch to use (deprecated ဖြစ်တဲ့ android.branch ကို p4a.branch သို့ ပြောင်းထားသည်)
+# NDK version ကို 25b သို့ တိကျစွာ သတ်မှတ်ပေးခြင်း (v28c ကြောင့် Error မတက်စေရန်)
+android.ndk = 25b
+
+# python-for-android branch to use
 p4a.branch = master
 
 [buildozer]
