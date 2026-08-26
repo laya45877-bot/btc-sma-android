@@ -19,7 +19,6 @@ source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
 
 # (list) Application requirements
-# comma separated e.g. requirements = sqlite3,kivy
 requirements = python3,kivy,openssl,certifi
 
 # (list) Supported orientations
@@ -40,8 +39,6 @@ android.format = apk
 #
 # Python for android (p4a) specific
 #
-
-# (str) python-for-android git clone directory (if empty, it will be automatically downloaded)
 p4a.branch = master
 
 #
