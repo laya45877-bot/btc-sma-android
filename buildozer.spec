@@ -49,10 +49,10 @@ fullscreen = 0
 #android.features = android.hardware.usb.host
 
 # (int) Target Android API, should be as high as possible.
-android.api = 33
+android.api = 31
 
 # (int) Minimum API your APK will support.
-android.minapi = 24
+android.minapi = 21
 
 # (str) Android NDK version to use
 android.ndk_version = 25b
@@ -102,7 +102,7 @@ android.format = apk
 #
 
 # (str) python-for-android git clone directory (if empty, it will be automatically downloaded)
-#p4a.branch = master
+p4a.branch = master
 
 # (str) The bootstrap to use for the app
 #bootstrap = sdl2
