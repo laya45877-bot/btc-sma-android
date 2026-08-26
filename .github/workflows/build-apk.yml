@@ -23,9 +23,13 @@ jobs:
         pip install --upgrade pip
         pip install --upgrade cython buildozer
 
-    - name: Force NDK r25b
+    - name: Prepare Android NDK 25b
       run: |
-        echo "ANDROID_NDK_HOME=$HOME/.buildozer/android/platform/android-ndk-r25b" >> $GITHUB_ENV
+        mkdir -p $HOME/.buildozer/android/platform
+        cd $HOME/.buildozer/android/platform
+        curl -O https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+        unzip -q android-ndk-r25b-linux.zip
+        mv android-ndk-r25b android-ndk-r28c
 
     - name: Build with Buildozer
       run: |
