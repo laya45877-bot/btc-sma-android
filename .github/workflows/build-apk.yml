@@ -9,6 +9,8 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
+    env:
+      TERM: dumb
 
     steps:
       - name: Checkout repository
