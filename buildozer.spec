@@ -19,7 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
 
 # (list) Application requirements
-requirements = python3,kivy==2.2.1
+requirements = python3,kivy==2.2.1,openssl,requests,urllib3,certifi,idna,charset-normalizer
 
 # (list) Supported orientations
 orientation = portrait
@@ -43,8 +43,8 @@ android.archs = arm64-v8a
 # (bool) If True, automatically accept SDK license
 android.accept_sdk_license = True
 
-# python-for-android branch to use
-android.branch = master
+# python-for-android branch to use (deprecated ဖြစ်တဲ့ android.branch ကို p4a.branch သို့ ပြောင်းထားသည်)
+p4a.branch = master
 
 [buildozer]
 
