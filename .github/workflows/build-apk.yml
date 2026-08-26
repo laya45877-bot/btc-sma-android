@@ -23,14 +23,6 @@ jobs:
         pip install --upgrade pip
         pip install --upgrade cython buildozer
 
-    - name: Prepare Android NDK 25b
-      run: |
-        mkdir -p $HOME/.buildozer/android/platform
-        cd $HOME/.buildozer/android/platform
-        curl -O https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
-        unzip -q android-ndk-r25b-linux.zip
-        mv android-ndk-r25b android-ndk-r28c
-
     - name: Build with Buildozer
       run: |
         buildozer -v android debug
