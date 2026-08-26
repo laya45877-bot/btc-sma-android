@@ -45,7 +45,6 @@ jobs:
 
       - name: Build APK with Buildozer
         run: |
-          sed -i 's/# android.ndk =.*/android.ndk = 25b/g' buildozer.spec || echo "android.ndk = 25b" >> buildozer.spec
           buildozer -v android debug
 
       - name: Upload APK
