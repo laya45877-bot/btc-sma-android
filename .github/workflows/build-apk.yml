@@ -37,11 +37,6 @@ jobs:
             build-essential ccache libltdl7 libltdl-dev openjdk-17-jdk \
             libssl-dev:i386 zlib1g-dev:i386 lld clang
 
-      - name: Setup ccache
-        uses: hendrikmi/ccache-action@v1.2
-        with:
-          key: build-android-ndk25b
-
       - name: Install Cython and Buildozer
         run: |
           python -m pip install --upgrade pip
@@ -50,9 +45,6 @@ jobs:
 
       - name: Build APK with Buildozer
         run: |
-          # ccache ကို Buildozer အသုံးပြုနိုင်ရန် ညွှန်ကြားခြင်း
-          export USE_CCACHE=1
-          export CCACHE_DIR="${{ github.workspace }}/.ccache"
           buildozer -v android debug
 
       - name: Upload APK
