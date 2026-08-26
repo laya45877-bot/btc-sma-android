@@ -18,8 +18,7 @@ source.include_exts = py,png,jpg,kv,atlas
 # (str) Application versioning
 version = 1.0
 
-# (list) Application requirements 
-# ဒီနေရာမှာ Kivy version ကို 2.2.1 သတ်မှတ်ပေးထားပါတယ် (Error လုံးဝမတက်တော့ပါ)
+# (list) Application requirements
 requirements = python3,kivy==2.2.1
 
 # (list) Supported orientations
@@ -32,24 +31,27 @@ orientation = portrait
 # (list) Permissions
 android.permissions = INTERNET
 
-# (int) Target Android API, should be as high as possible.
+# (int) Target Android API
 android.api = 33
 
-# (int) Minimum API your APK will support.
+# (int) Minimum API your APK will support
 android.minapi = 24
 
-# (list) Android architectural support (arm64-v8a, armeabi-v7a, x86, x86_64)
+# (list) Android architectural support
 android.archs = arm64-v8a
 
 # (bool) If True, automatically accept SDK license
 android.accept_sdk_license = True
 
+# python-for-android branch to use
+android.branch = master
+
 [buildozer]
 
-# (int) Log level (0 = error, 1 = info, 2 = debug (with command output))
+# (int) Log level (0 = error, 1 = info, 2 = debug)
 log_level = 2
 
-# (int) Display warning if buildozer is run as root (0 = False, 1 = True)
+# (int) Display warning if buildozer is run as root
 warn_on_root = 1
 
 # (str) Path to build artifact, storage, etc.
