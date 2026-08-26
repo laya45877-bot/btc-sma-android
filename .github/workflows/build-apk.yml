@@ -39,7 +39,8 @@ jobs:
           sudo apt-get install -y \
             git zip unzip autoconf automake libtool pkg-config zlib1g-dev \
             libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev \
-            build-essential ccache libltdl7 libltdl-dev openjdk-17-jdk
+            build-essential ccache libltdl7 libltdl-dev openjdk-17-jdk \
+            libssl-dev:i386 zlib1g-dev:i386
 
       - name: Install Buildozer & Cython
         run: |
@@ -50,6 +51,7 @@ jobs:
       - name: Build APK with Buildozer
         run: |
           export PIP_DEFAULT_TIMEOUT=1000
+          export PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig"
           yes | buildozer android debug
 
       - name: Upload APK
