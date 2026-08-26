@@ -54,6 +54,8 @@ jobs:
         run: |
           export PIP_DEFAULT_TIMEOUT=1000
           export PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig"
+          # NDK version r25b ကို အတိအကျ သုံးခိုင်းခြင်း
+          sed -i 's/# android.ndk =.*/android.ndk = 25b/g' buildozer.spec || echo "android.ndk = 25b" >> buildozer.spec
           yes | buildozer android debug
 
       - name: Upload APK
