@@ -102,7 +102,7 @@ android.format = apk
 #
 
 # (str) python-for-android git clone directory (if empty, it will be automatically downloaded)
-p4a.branch = master
+p4a.branch = release-2024.01.22
 
 # (str) The bootstrap to use for the app
 #bootstrap = sdl2
