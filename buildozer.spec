@@ -19,8 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
 
 # (list) Application requirements (ဒီနေရာမှာ APK ပေါ့ပါးအောင် လိုအပ်တာတွေပဲ ချုံ့ထားပါတယ်)
-requirements = python3,kivy==2.2.1,openssl,certifi
-
+requirements = python3,kivy,openssl,certifi
 # (list) Supported orientations
 orientation = portrait
 
