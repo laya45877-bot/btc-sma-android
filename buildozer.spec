@@ -55,7 +55,9 @@ fullscreen = 0
 android.minapi = 24
 
 # (str) Android NDK version to use
-#android.ndk_version = 25b
+android.ndk_version = 25b
+android.api = 33
+android.minapi = 24
 
 # (bool) Use --private-storage data/data instead of external storage
 #android.private_storage = True
