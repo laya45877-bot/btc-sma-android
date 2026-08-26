@@ -49,6 +49,7 @@ jobs:
 
       - name: Build APK with Buildozer
         run: |
+          export PIP_DEFAULT_TIMEOUT=1000
           yes | buildozer android debug
 
       - name: Upload APK
