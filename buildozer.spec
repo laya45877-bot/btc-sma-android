@@ -18,8 +18,8 @@ source.include_exts = py,png,jpg,kv,atlas
 # (str) Application versioning
 version = 1.0
 
-# (list) Application requirements
-requirements = python3,kivy==2.2.1,openssl,requests,urllib3,certifi,idna,charset-normalizer
+# (list) Application requirements (ဒီနေရာမှာ APK ပေါ့ပါးအောင် လိုအပ်တာတွေပဲ ချုံ့ထားပါတယ်)
+requirements = python3,kivy==2.2.1,openssl,certifi
 
 # (list) Supported orientations
 orientation = portrait
@@ -43,7 +43,7 @@ android.archs = arm64-v8a
 # (bool) If True, automatically accept SDK license
 android.accept_sdk_license = True
 
-# NDK version ကို 25b သို့ တိကျစွာ သတ်မှတ်ပေးခြင်း (v28c ကြောင့် Error မတက်စေရန်)
+# NDK version ကို 25b သို့ တိကျစွာ သတ်မှတ်ပေးခြင်း
 android.ndk = 25b
 
 # python-for-android branch to use
