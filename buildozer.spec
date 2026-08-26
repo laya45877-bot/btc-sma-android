@@ -1,7 +1,7 @@
 [app]
 
 # (str) Title of your application
-title = BTC SMA Bot by Kyaw Thet Aung(Zeyo)
+title = BTC SMA Bot
 
 # (str) Package name
 package.name = btcsma
@@ -19,8 +19,9 @@ source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
 
 # (list) Application requirements 
-# ဒီနေရာမှာ လိုအပ်မယ့် libraries တွေ အားလုံးကို ကော်မာ (,) ခံပြီး ထည့်ပေးရပါမယ်
+# ဒီနေရာမှာ Kivy version ကို 2.2.1 သတ်မှတ်ပေးထားပါတယ် (Error လုံးဝမတက်တော့ပါ)
 requirements = python3,kivy==2.2.1
+
 # (list) Supported orientations
 orientation = portrait
 
