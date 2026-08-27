@@ -1,55 +1,83 @@
 [app]
 
 # (str) Title of your application
-title = BTC SMA Bot by Kyaw Thet Aung (Zeyo)
+title = BTC SMA App
 
 # (str) Package name
 package.name = btcsma
 
 # (str) Package domain (needed for android packaging)
-package.domain = org.example
+package.domain = org.btcsma
 
-# (list) Source files to include (let it empty to include all files)
-source.dir = .
-
-# (list) List of extensions to pack
+# (list) Source files to include (let it blank to include all files)
 source.include_exts = py,png,jpg,kv,atlas
 
-# (str) Application versioning
-version = 1.0
+# (list) List of inclusions using pattern matching
+#source.include_patterns = assets/*,images/*.png
+
+# (list) Source files to exclude (let it blank to exclude nothing)
+#source.exclude_exts = spec
+
+# (list) List of directory to exclude (let it blank to exclude nothing)
+#source.exclude_dirs = tests, bin, venv
+
+# (list) List of exclusions using pattern matching
+#source.exclude_patterns = license,images/*.jpg
+
+# (str) Application versioning (method 1)
+version = 0.1
 
 # (list) Application requirements
-requirements = python3,kivy,openssl,certifi
+# (ဗားရှင်း Error မတက်အောင် pyjnius မှာ version ဖြုတ်ထားပါတယ်)
+requirements = python3,kivy,pyjnius
 
-# (list) Supported orientations
+# (list) Custom source folders for requirements
+#requirements.source.dir = ../../../
+
+# (list) Permissions
+android.permissions = INTERNET
+
+# (list) Features
+#android.features = android.hardware.usb.host
+
+# (str) Supported orientations
 orientation = portrait
 
+# (list) List of service to declare
+#services = 
+
+#
+# OSX Specific
+#
+
+#
+# Fullscreen
+#
+fullscreen = 0
+
+# (string) Presplash background color (hex color code)
+#presplash.color = #121212
+
+# (string) Icon of the application
+#icon.filename = %(source.dir)s/data/icon.png
+
+# (list) Supported architectures
+android.archs = arm64-v8a, armeabi-v7a
+
 # (int) Target Android API, should be as high as possible.
-android.api = 31
+android.api = 33
 
 # (int) Minimum API your APK will support.
 android.minapi = 21
 
 # (str) Android NDK version to use
-android.ndk_version = 25b
+android.ndk = 25b
 
-# (str) The format used to package the app for release/debug (apk or aab)
-android.format = apk
+# (bool) Use --private data storage (True) or --dir public storage (False)
+android.private_storage = True
 
-#
-# Python for android (p4a) specific
-#
-p4a.branch = master
+# (str) Android logcat filters
+#android.logcat_filters = *:S python:D
 
-#
-# To successfully build a application for Google Play, you need to accept the SDK licenses.
-#
-android.accept_sdk_license = True
-
-[buildozer]
-
-# (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
-log_level = 2
-
-# (int) Display warning if buildozer is run as root (0 = False, 1 = True)
-warn_on_root = 0
+# (str) Android additional adb install arguments
+#android.adb_install_args = --unsupported
