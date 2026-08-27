@@ -12,7 +12,6 @@ source.include_exts = py,png,jpg,kv,atlas
 
 version = 0.1
 
-# (pyjnius ဗားရှင်း Error မတက်အောင် လွတ်လပ်စွာ ယူခိုင်းထားပါသည်)
 requirements = python3,kivy,pyjnius
 
 android.permissions = INTERNET
@@ -28,3 +27,6 @@ android.minapi = 21
 android.ndk = 25b
 
 android.accept_sdk_license = True
+
+# (str) python-for-android branch to use (stable branch ကို သုံးရန်)
+p4a.branch = release
