@@ -12,7 +12,8 @@ source.include_exts = py,png,jpg,kv,atlas
 
 version = 0.1
 
-requirements = python3,kivy,pyjnius
+# (pyjnius ကြောင့် Error ထပ်မတက်အောင် requirements ထဲမှ လုံးဝဖယ်ထုတ်ထားပါသည်)
+requirements = python3,kivy
 
 android.permissions = INTERNET
 
