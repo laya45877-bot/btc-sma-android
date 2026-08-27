@@ -9,6 +9,9 @@ package.name = cryptoapp
 # (str) Package domain (needed for android packaging)
 package.domain = org.crypto
 
+# (str) Source directory where your app lives
+source.dir = .
+
 # (list) Source files to include (let it include python, png, kv, json, etc.)
 source.include_exts = py,png,jpg,kv,atlas
 
@@ -46,7 +49,7 @@ orientation = portrait
 
 #
 # -----------------------------------------------------------------------
-# Androp-specific settings
+# Android-specific settings
 
 # (int) Target Android API, should be as high as possible.
 android.api = 33
@@ -82,6 +85,3 @@ warn_root = 1
 
 # (str) Path to build artifact, storage, etc.
 bin_dir = ./bin
-
-# (str) Path to build output
-#build_dir = .buildozer
