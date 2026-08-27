@@ -1,52 +1,107 @@
 [app]
 
-# (str) Title of your application
+# --------------------------------
+# Application information
+# --------------------------------
+
 title = BTC SMA App
 
-# (str) Package name
 package.name = btcsma
 
-# (str) Package domain (needed for android packaging)
 package.domain = org.btcsma
 
-# (str) Source where the app is located
-source.dir = .
-
-# (list) Source files to include (let it blank to include all files)
-source.include_exts = py,png,jpg,kv,atlas
-
-# (list) Source files to exclude (let it blank to exclude nothing)
-#source.exclude_exts = spec
-
-# (list) List of directory to exclude (let it blank to exclude nothing)
-#source.exclude_dirs = tests, bin, venv
-
-# (str) Application versioning (method 1)
 version = 0.1
 
-# (list) Application requirements
+
+# --------------------------------
+# Source
+# --------------------------------
+
+source.dir = .
+
+source.include_exts = py,png,jpg,jpeg,kv,atlas,json,csv,txt,ttf,otf
+
+
+# --------------------------------
+# Exclude unnecessary files
+# --------------------------------
+
+source.exclude_dirs = .git,bin,.buildozer,venv,tests,__pycache__
+
+
+# --------------------------------
+# Python requirements
+# --------------------------------
+
 requirements = python3,kivy,pyjnius
 
-# (list) Permissions
+
+# --------------------------------
+# Android permissions
+# --------------------------------
+
 android.permissions = INTERNET
 
-# (str) Supported orientations
+
+# --------------------------------
+# Screen orientation
+# --------------------------------
+
 orientation = portrait
 
-# (bool) Use --private data storage (True) or --dir public storage (False)
+
+# --------------------------------
+# Android storage
+# --------------------------------
+
 android.private_storage = True
 
-# (list) Supported architectures
-android.archs = arm64-v8a, armeabi-v7a
 
-# (int) Target Android API, should be as high as possible.
+# --------------------------------
+# Android architectures
+# --------------------------------
+
+android.archs = arm64-v8a,armeabi-v7a
+
+
+# --------------------------------
+# Android API
+# --------------------------------
+
 android.api = 33
 
-# (int) Minimum API your APK will support.
 android.minapi = 21
 
-# (str) Android NDK version to use
+
+# --------------------------------
+# Android NDK
+# --------------------------------
+
 android.ndk = 25b
 
-# (bool) Automatically accept Android SDK licenses
+
+# --------------------------------
+# Android build
+# --------------------------------
+
+p4a.bootstrap = sdl2
+
 android.accept_sdk_license = True
+
+
+# --------------------------------
+# Python for Android
+# --------------------------------
+
+p4a.branch = master
+
+
+# --------------------------------
+# Buildozer settings
+# --------------------------------
+
+[buildozer]
+
+log_level = 2
+
+warn_on_root = 1
