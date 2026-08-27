@@ -27,6 +27,3 @@ android.minapi = 21
 android.ndk = 25b
 
 android.accept_sdk_license = True
-
-# (str) python-for-android branch to use (stable branch ကို သုံးရန်)
-p4a.branch = release
