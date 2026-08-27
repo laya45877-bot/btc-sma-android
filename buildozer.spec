@@ -12,6 +12,7 @@ source.include_exts = py,png,jpg,kv,atlas
 
 version = 0.1
 
+# (pyjnius ဗားရှင်း Error မတက်အောင် လွတ်လပ်စွာ ယူခိုင်းထားပါသည်)
 requirements = python3,kivy,pyjnius
 
 android.permissions = INTERNET
