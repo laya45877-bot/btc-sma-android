@@ -9,11 +9,11 @@ package.name = btcsma
 # (str) Package domain (needed for android packaging)
 package.domain = org.btcsma
 
+# (str) Source where the app is located
+source.dir = .
+
 # (list) Source files to include (let it blank to include all files)
 source.include_exts = py,png,jpg,kv,atlas
-
-# (list) List of inclusions using pattern matching
-#source.include_patterns = assets/*,images/*.png
 
 # (list) Source files to exclude (let it blank to exclude nothing)
 #source.exclude_exts = spec
@@ -21,45 +21,20 @@ source.include_exts = py,png,jpg,kv,atlas
 # (list) List of directory to exclude (let it blank to exclude nothing)
 #source.exclude_dirs = tests, bin, venv
 
-# (list) List of exclusions using pattern matching
-#source.exclude_patterns = license,images/*.jpg
-
 # (str) Application versioning (method 1)
 version = 0.1
 
 # (list) Application requirements
-# (ဗားရှင်း Error မတက်အောင် pyjnius မှာ version ဖြုတ်ထားပါတယ်)
 requirements = python3,kivy,pyjnius
-
-# (list) Custom source folders for requirements
-#requirements.source.dir = ../../../
 
 # (list) Permissions
 android.permissions = INTERNET
 
-# (list) Features
-#android.features = android.hardware.usb.host
-
 # (str) Supported orientations
 orientation = portrait
 
-# (list) List of service to declare
-#services = 
-
-#
-# OSX Specific
-#
-
-#
-# Fullscreen
-#
-fullscreen = 0
-
-# (string) Presplash background color (hex color code)
-#presplash.color = #121212
-
-# (string) Icon of the application
-#icon.filename = %(source.dir)s/data/icon.png
+# (bool) Use --private data storage (True) or --dir public storage (False)
+android.private_storage = True
 
 # (list) Supported architectures
 android.archs = arm64-v8a, armeabi-v7a
@@ -72,12 +47,3 @@ android.minapi = 21
 
 # (str) Android NDK version to use
 android.ndk = 25b
-
-# (bool) Use --private data storage (True) or --dir public storage (False)
-android.private_storage = True
-
-# (str) Android logcat filters
-#android.logcat_filters = *:S python:D
-
-# (str) Android additional adb install arguments
-#android.adb_install_args = --unsupported
