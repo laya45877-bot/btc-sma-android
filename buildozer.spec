@@ -25,7 +25,8 @@ source.include_dirs = assets,images
 source.exclude_dirs = tests, bin, venv
 
 # (list) Application requirements
-requirements = python3,kivy
+# pip မှ ဗားရှင်းတိကျစွာ ရှာမတွေ့သည်များကို ရှောင်ရှားရန် ဗားရှင်းနံပါတ်များကို ဖြုတ်ထားပါ
+requirements = python3,kivy,certifi,urllib3,idna,charset-normalizer,requests
 
 # (str) Version of the application
 version = 0.1
