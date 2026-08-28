@@ -25,7 +25,6 @@ source.include_dirs = assets,images
 source.exclude_dirs = tests, bin, venv
 
 # (list) Application requirements
-# လိုအပ်သော Python libraries များကို ဤနေရာတွင် ထည့်ပါ
 requirements = python3,kivy
 
 # (str) Version of the application
@@ -34,18 +33,8 @@ version = 0.1
 # (list) Application permissions
 android.permissions = INTERNET
 
-# (list) Features
-#android.features = android.hardware.usb.host
-
 # (str) Supported orientations (landscape, portrait or all)
 orientation = portrait
-
-# (list) List of service to declare
-#android.services = 
-
-#
-# OSX specific
-#
 
 #
 # -----------------------------------------------------------------------
@@ -65,9 +54,6 @@ android.ndk = 25b
 
 # (str) Android SDK version to use
 android.sdk = 33
-
-# (str) python-for-android branch to use
-p4a.branch = master
 
 # (list) Architectural build to support
 android.archs = arm64-v8a, armeabi-v7a
