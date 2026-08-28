@@ -1,58 +1,46 @@
-[app]
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.button import Button
 
-# (str) Title of your application
-title = BTC SMA Bot by Kyaw Thet Aung(Zeyo)
+class BTCSMAApp(App):
+    def build(self):
+        # Main Layout
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=15)
+        
+        # Title Label with Name
+        self.title_label = Label(
+            text='BTC SMA Bot\nby Kyaw Thet Aung (Zeyo)',
+            font_size=22,
+            halign='center',
+            valign='middle'
+        )
+        self.title_label.bind(size=self.title_label.setter('text_size'))
+        layout.add_widget(self.title_label)
+        
+        # Status Label
+        self.status_label = Label(
+            text='Status: Ready to run',
+            font_size=16,
+            halign='center'
+        )
+        self.status_label.bind(size=self.status_label.setter('text_size'))
+        layout.add_widget(self.status_label)
+        
+        # Action Button
+        self.btn = Button(
+            text='Check BTC SMA',
+            size_hint=(1, 0.2),
+            background_color=(0.1, 0.5, 0.8, 1)
+        )
+        self.btn.bind(on_press=self.on_button_click)
+        layout.add_widget(self.btn)
+        
+        return layout
 
-# (str) Package name
-package.name = btcsma
+    def on_button_click(self, instance):
+        self.status_label.text = 'Fetching BTC data...'
+        # နောက်ပိုင်း ကိုကို့ရဲ့ Bot logic တွေကို ဒီနေရာမှာ ထည့်လို့ရပါတယ်
 
-# (str) Package domain (needed for android packaging)
-package.domain = org.example
-
-# (list) Source files to include (let it empty to include all files)
-source.dir = .
-
-# (list) List of extensions to pack
-source.include_exts = py,png,jpg,kv,atlas
-
-# (str) Application versioning
-version = 1.0
-
-# (list) Application requirements
-requirements = python3,kivy
-
-# (list) Supported orientations
-orientation = portrait
-
-#
-# Android specific
-#
-
-# (list) Permissions
-android.permissions = INTERNET
-
-# (int) Target Android API, should be as high as possible.
-android.api = 33
-
-# (int) Minimum API your APK will support.
-android.minapi = 24
-
-# (list) Android architectural support (arm64-v8a, armeabi-v7a, x86, x86_64)
-android.archs = arm64-v8a
-
-# (bool) If True, automatically accept SDK license
-android.accept_sdk_license = True
-
-[buildozer]
-
-# (int) Log level (0 = error, 1 = info, 2 = debug (with command output))
-log_level = 2
-
-# (int) Display warning if buildozer is run as root (0 = False, 1 = True)
-warn_on_root = 1
-
-# (str) Path to build artifact, storage, etc.
-build_dir = .buildozer
-
-# (str) Path to output bin (APK, AAB)
-bin_dir = ./bin
+if __name__ == '__main__':
+    BTCSMAApp().run()
