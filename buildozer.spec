@@ -1,47 +1,44 @@
-name: CI
+[app]
 
-on:
-  push:
-    branches: [ main, master ]
+# (str) Title of your application
+title = Trade Ai, Help for you
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# (str) Package name
+package.name = tradeaihelpyou
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+# (str) Package domain (needed for android packaging)
+package.domain = org.tradeai
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+# (str) Source where the main.py lives
+source.dir = .
 
-      - name: Set up Java JDK 17
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'zulu'
-          java-version: '17'
+# (list) Source files to include (let it empty to include all files)
+source.include_exts = py,png,jpg,kv,atlas,json
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config \
-            zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev \
-            libssl-dev libltdl-dev
+# (list) Application requirements
+requirements = python3,kivy,requests
 
-      - name: Install Buildozer and Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install --upgrade cython==0.29.33 buildozer
+# (str) Version of the application
+version = 0.1
 
-      - name: Build APK with Buildozer
-        run: |
-          yes | buildozer -v android debug
+# (list) Supported orientations
+orientation = portrait
 
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: package
-          path: bin/*.apk
+# (int) Target Android API, should be as high as possible
+android.api = 31
+
+# (int) Minimum API your APK will support
+android.min_api = 21
+
+# (str) Android NDK version to use
+android.ndk = 25b
+
+# (str) Android SDK version to use
+android.sdk = 31
+
+# (bool) If True, then automatically accept SDK license agreements
+android.accept_sdk_license = True
+
+[buildozer]
+# (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
+log_level = 2
