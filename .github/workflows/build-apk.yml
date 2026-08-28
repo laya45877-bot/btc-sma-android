@@ -31,18 +31,15 @@ jobs:
             zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev \
             libssl-dev libltdl-dev
 
-      - name: Install Buildozer and Dependencies
+      - name: Install Buildozer and Stable Dependencies
         run: |
           pip install --upgrade pip
-          pip install "cython<0.30.0" setuptools==65.5.0 buildozer
+          pip install "cython<0.30.0" setuptools==65.5.0
+          pip install --git https://github.com/kivy/buildozer.git master
 
       - name: Build APK with Buildozer
         run: |
           yes | buildozer -v android debug
-
-      - name: Find and Fix APK Path
-        run: |
-          ls -la bin/
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
