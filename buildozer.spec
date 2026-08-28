@@ -30,11 +30,14 @@ android.api = 31
 # (int) Minimum API your APK will support
 android.min_api = 21
 
-# (str) Android SDK version to use
-# android.sdk = 31
-
 # (str) Android NDK version to use
-# android.ndk = 25b
+android.ndk = 25b
+
+# (str) Android SDK version to use
+android.sdk = 31
+
+# (str) ANT version to use
+# android.ant_version = 1.9.4
 
 [buildozer]
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
