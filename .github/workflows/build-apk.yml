@@ -31,7 +31,7 @@ jobs:
             zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev \
             libssl-dev libltdl-dev
 
-      - name: Install Buildozer and Locked Dependencies
+      - name: Install Buildozer and Dependencies
         run: |
           pip install --upgrade pip
           pip install "cython<0.30.0" setuptools==65.5.0 buildozer
@@ -40,8 +40,13 @@ jobs:
         run: |
           yes | buildozer -v android debug
 
-      - name: Upload Build Artifacts
+      - name: Find and Fix APK Path
+        run: |
+          ls -la bin/
+
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-logs-and-apk
+          name: TradeAi-APK
           path: bin/*.apk
+          if-no-files-found: ignore
