@@ -36,6 +36,9 @@ android.min_api = 21
 # (bool) Use the AndroidX support library
 android.androidx = True
 
+# (str) NDK version to use
+android.ndk_version = 25b
+
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug command)
