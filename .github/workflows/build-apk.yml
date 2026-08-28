@@ -37,6 +37,10 @@ jobs:
           pip install "cython<0.30.0" setuptools==65.5.0
           pip install buildozer
 
+      - name: Clear Buildozer Cache
+        run: |
+          rm -rf ~/.buildozer/android/platform/build-*
+
       - name: Build APK with Buildozer
         run: |
           yes | buildozer -v android debug
