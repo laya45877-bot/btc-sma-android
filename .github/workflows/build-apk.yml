@@ -25,7 +25,6 @@ jobs:
         with:
           python-version: "3.10"
 
-      # Cache ကို ခေတ္တပိတ်ပြီး အစကနေ သန့်ရှင်းစွာ Build စေရန် (Clean Build)
       - name: Install system dependencies
         run: |
           sudo dpkg --add-architecture i386
@@ -61,15 +60,8 @@ jobs:
         run: |
           script -q -c "buildozer -v android debug" build.log
 
-      - name: Check files in workspace
-        run: |
-          find . -name "*.apk"
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: btc-sma-debug-apk
-          path: |
-            *.apk
-            **/bin/*.apk
-            bin/*.apk
+          path: bin/
