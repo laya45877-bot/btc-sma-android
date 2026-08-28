@@ -60,8 +60,11 @@ jobs:
         run: |
           script -q -c "buildozer -v android debug" build.log
 
-      - name: Upload APK
+      - name: Upload Build Log and Bin
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: btc-sma-debug-apk
-          path: bin/
+          name: build-logs-and-apk
+          path: |
+            build.log
+            bin/*.apk
