@@ -9,15 +9,17 @@ package.name = tradeai
 # (str) Package domain (needed for android packaging)
 package.domain = org.tradeai
 
+# (str) Source where the main.py lives
+source.dir = .
+
 # (list) Source files to include (let it empty to include all files)
 source.include_exts = py,png,jpg,kv,atlas,json
 
-# (list) List of directory to include/exclude from source files
-source.include_dirs = 
-
 # (list) Application requirements
-# (python3 နှင့် kivy ကိုသာ သေချာထည့်ထားပြီး pyjnius ကို သီးသန့်ထပ်မထည့်တော့ပါ)
 requirements = python3,kivy
+
+# (str) Application versioning
+version = 0.1
 
 # (str) Supported orientation (landscape, portrait or all)
 orientation = portrait
